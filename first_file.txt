@@ -8,4 +8,4 @@ testing this file for webhook to trigger jenkins automatically.
 
 testing for another build using webhook
 
-testing for webhook assignment for freestyle job
+testing for webhook assignment for freestylejob
