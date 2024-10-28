@@ -9,3 +9,5 @@ testing this file for webhook to trigger jenkins automatically.
 testing for another build using webhook
 
 testing for webhook-assignment1 for the freestyle job
+
+testing webhook for pipeline job 
