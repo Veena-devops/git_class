@@ -27,7 +27,7 @@ node('Agent-2') {
 
     stage('Deploy') {
         try {
-            sh 'sudo cp /home/ubuntu/jenkins/workspace/ques4-tomcat-declarative/target/works-with-heroku-1.0.war /opt/apache-tomcat-9.0.95/webapps'
+            sh 'sudo cp /home/ubuntu/jenkins/workspace/ques4-tomcat-groovy/target/works-with-heroku-1.0.war /opt/apache-tomcat-9.0.95/webapps'
             sh 'sudo stopTomcat'
             sh 'sudo startTomcat'
             echo 'Successfully deployed'
