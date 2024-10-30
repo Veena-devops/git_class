@@ -3,7 +3,7 @@ node('Agent-2') {
     stage('Checkout') {
         checkout([$class: 'GitSCM',
                   branches: [[name: 'main']],
-                  userRemoteConfigs: [[url: 'https://github.com/Veena-devops/sparkjava-war-example.git']]
+                  userRemoteConfigs: [[url: 'https://github.com/Veena-devops/java-example.git']]
                  ])
     }
 
@@ -27,7 +27,7 @@ node('Agent-2') {
 
     stage('Deploy') {
         try {
-            sh 'sudo cp /home/ubuntu/jenkins/workspace/ques4-tomcat-groovy/target/sparkjava-hello-world-1.0.war /opt/apache-tomcat-9.0.95/webapps'
+            sh 'sudo cp /home/ubuntu/jenkins/workspace/ques4-tomcat-groovy/target/works-with-heroku-1.0.war /opt/apache-tomcat-9.0.95/webapps'
             sh 'sudo stopTomcat'
             sh 'sudo startTomcat'
             echo 'Successfully deployed'
