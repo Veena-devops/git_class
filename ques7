@@ -43,7 +43,7 @@ pipeline {
         stage('Run on Agent 2') {
             agent { label 'Agent-2' }
              when {
-                    branch 'main' 
+                    
                     branch 'dev1'
                     expression { 
 				(currentBuild.result == null || currentBuild.result == 'SUCCESS') 
