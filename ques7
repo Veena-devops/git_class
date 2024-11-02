@@ -71,9 +71,8 @@ pipeline {
                 stage('Push') {
                     steps {
                         echo 'Pusing artifact to artifactory'
-			sh 'echo $AWS_ACCESS_KEY'
-						
-			sh 'echo 'USERNAME:PASSWORD:: $GITHUB_CRED'
+			sh 'echo $AWS_ACCESS_KEY'			
+			sh 'echo USERNAME:PASSWORD:: $GITHUB_CRED'
 			sh 'echo username: $GITHUB_CRED_USR'
 			sh 'echo password: $GITHUB_CRED_PSW'
                     }
