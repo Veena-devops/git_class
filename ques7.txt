@@ -1,0 +1,90 @@
+pipeline {
+    agent none
+	parameters {
+			string defaultValue: 'Jenkins', name: 'env_var1'
+			choice choices: ['Dev', 'Test', 'Prod'], name: 'env_var2'
+			booleanParam defaultValue: true, name: 'env_var3'
+}
+
+    triggers{
+			cron '30 */4 * * *'
+			pollSCM '30 * * * *'
+		}
+		
+	environment {
+        MY_STRING = "${params.env_var1}"
+        MY_CHOICE = "${params.env_var2}"
+        MY_BOOLEAN = "${params.env_var3}"
+    }
+    stages {
+        
+        stage('Run on Agent 1') {
+            agent { label 'java' }
+            
+            stages {
+                stage('Checkout') {
+                    steps {
+                        git branch: 'main', url: 'https://github.com/Veena-devops/java-example.git'
+                    }
+                }
+                stage('Test') {
+                    steps {
+               
+						echo 'Running unit test and integration test'
+						echo "Environment Variable MY_STRING: ${MY_STRING}"
+						echo "Environment Variable MY_CHOICE: ${MY_CHOICE}"
+						echo "Environment Variable MY_BOOLEAN: ${MY_BOOLEAN}"
+                    }
+                }
+            }
+        }
+        
+        
+        stage('Run on Agent 2') {
+            agent { label 'Agent-2' }
+             when {
+                allOf {
+                    branch 'master' 
+                    branch 'dev'
+                    expression { currentBuild.result == null || currentBuild.result == 'SUCCESS' } // Only runs if the previous stages succeeded
+                }
+            }
+            stages {
+                stage('Build') {
+				when {
+                expression { currentBuild.result == null || currentBuild.result == 'SUCCESS' } // Only runs if the previous stages succeeded
+            }
+                    steps {
+                        
+						// Using Global Variables
+						echo "jobname :  '$JOB_NAME'"
+						echo "build no:  '$BUILD_NUMBER'"
+						echo "job URL: '$BUILD_URL'"
+						echo "Jenkins URL: '$JENKINS_URL'"
+                    }
+                }
+                stage('Push') {
+                    steps {
+                        echo 'Pusing artifact to artifactory'
+                    }
+                }
+            }
+        }
+    }
+	
+	post {
+        
+		always {	    
+				
+			emailext body: '''
+			jobname :  '$JOB_NAME'
+            build no:  '$BUILD_NUMBER'
+            job URL: '$BUILD_URL'
+            build status: '$BUILD_STATUS'
+
+             ''', subject: '$JOB_NAME' , from: 'jenkins@example.com', to: 'vlakkamraju11@gmail.com'
+
+}
+
+
+In cron job, H: This is a Jenkins-specific syntax that stands for "Hash," which Jenkins uses to distribute load evenly across available times. H is used instead of an exact number to allow Jenkins to automatically determine the minute based on a hash of the job name. This means the job won't run at the exact same minute as other jobs with the same */4 frequency, reducing potential resource contention.
