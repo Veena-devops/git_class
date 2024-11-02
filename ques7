@@ -87,4 +87,4 @@ pipeline {
 }
 
 
-In cron job, H: This is a Jenkins-specific syntax that stands for "Hash," which Jenkins uses to distribute load evenly across available times. H is used instead of an exact number to allow Jenkins to automatically determine the minute based on a hash of the job name. This means the job won't run at the exact same minute as other jobs with the same */4 frequency, reducing potential resource contention.
+
