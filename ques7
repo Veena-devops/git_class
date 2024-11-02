@@ -12,6 +12,8 @@ pipeline {
 		}
 		
 	environment {
+	AWS_ACCESS_KEY=credentials('aws_access_key')
+	GITHUB_CRED=credentials('github_new')
         MY_STRING = "${params.env_var1}"
         MY_CHOICE = "${params.env_var2}"
         MY_BOOLEAN = "${params.env_var3}"
@@ -69,6 +71,11 @@ pipeline {
                 stage('Push') {
                     steps {
                         echo 'Pusing artifact to artifactory'
+			sh 'echo $AWS_ACCESS_KEY'
+						
+			sh 'echo 'USERNAME:PASSWORD:: $GITHUB_CRED'
+			sh 'echo username: $GITHUB_CRED_USR'
+			sh 'echo password: $GITHUB_CRED_PSW'
                     }
                 }
             }
