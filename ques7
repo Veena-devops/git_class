@@ -44,7 +44,7 @@ pipeline {
             agent { label 'Agent-2' }
              when {
                 allOf {
-                    branch 'master' 
+                    branch 'main' 
                     branch 'dev'
                     expression { 
 				(currentBuild.result == null || currentBuild.result == 'SUCCESS') 
