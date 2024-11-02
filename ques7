@@ -46,13 +46,17 @@ pipeline {
                 allOf {
                     branch 'master' 
                     branch 'dev'
-                    expression { currentBuild.result == null || currentBuild.result == 'SUCCESS' } // Only runs if the previous stages succeeded
+                    expression { 
+				(currentBuild.result == null || currentBuild.result == 'SUCCESS') 
+			} 
                 }
             }
             stages {
                 stage('Build') {
 				when {
-                expression { currentBuild.result == null || currentBuild.result == 'SUCCESS' } // Only runs if the previous stages succeeded
+                expression { 
+				(currentBuild.result == null || currentBuild.result == 'SUCCESS') 
+		} 
             }
                     steps {
                         
