@@ -85,6 +85,8 @@ pipeline {
              ''', subject: '$JOB_NAME' , from: 'jenkins@example.com', to: 'vlakkamraju11@gmail.com'
 
 }
+}
+}
 
 
 
