@@ -33,7 +33,7 @@ pipeline {
 						echo 'Running unit test and integration test'
 						echo "Environment Variable MY_STRING: ${MY_STRING}"
 						echo "Environment Variable MY_CHOICE: ${MY_CHOICE}"
-						echo "Environment Variable MY_BOOLEAN: ${MY_BOOLEAN}"
+						echo "Environment Variable MY_BOOLEAN: ${MY_BOOLEAN1}"
                     }
                 }
             }
