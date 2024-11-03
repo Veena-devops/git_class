@@ -1,3 +1,4 @@
+
 pipeline {
     agent none
 	parameters {
@@ -12,22 +13,28 @@ pipeline {
 		}
 		
 	environment {
+	AWS_ACCESS_KEY=credentials('aws_access_key')
+	GITHUB_CRED=credentials('github_new')
         MY_STRING = "${params.env_var1}"
         MY_CHOICE = "${params.env_var2}"
         MY_BOOLEAN = "${params.env_var3}"
     }
     stages {
         
-        stage('Run on Agent 1') {
-            agent { label 'java' }
-            
-            stages {
-                stage('Checkout') {
-                    steps {
-                        git branch: 'main', url: 'https://github.com/Veena-devops/java-example.git'
+        stage('checkout') {
+            agent{label 'java'}
+			when{
+				anyOf{
+						branch 'main'
+						branch 'dev1'
+				}
+			}
+            steps {
+                    git branch: 'main', url: 'https://github.com/Veena-devops/java-example.git'
                     }
                 }
-                stage('Test') {
+        stage('Test') {
+				agent{label 'java'}
                     steps {
                
 						echo 'Running unit test and integration test'
@@ -36,28 +43,21 @@ pipeline {
 						echo "Environment Variable MY_BOOLEAN: ${MY_BOOLEAN}"
                     }
                 }
-            }
-        }
+            
         
         
-        stage('Run on Agent 2') {
-            agent { label 'Agent-2' }
-             when {
+        
+        stage('Build') {
+            agent {label 'Agent-2'}
+             when { 
                     
-                    branch 'dev1'
                     expression { 
 				(currentBuild.result == null || currentBuild.result == 'SUCCESS') 
-		
-                }
+			} 
+                
             }
-            stages {
-                stage('Build') {
-				when {
-                expression { 
-				(currentBuild.result == null || currentBuild.result == 'SUCCESS') 
-		} 
-            }
-                    steps {
+            
+				steps {
                         
 						// Using Global Variables
 						echo "jobname :  '$JOB_NAME'"
@@ -66,14 +66,25 @@ pipeline {
 						echo "Jenkins URL: '$JENKINS_URL'"
                     }
                 }
-                stage('Push') {
+				
+            stage('Push') {
+				agent{label 'Agent-2'}
+				when {
+                expression { 
+				(currentBuild.result == null || currentBuild.result == 'SUCCESS') 
+		} 
+            }
                     steps {
                         echo 'Pusing artifact to artifactory'
+			sh 'echo $AWS_ACCESS_KEY'			
+			sh 'echo USERNAME:PASSWORD:: $GITHUB_CRED'
+			sh 'echo username: $GITHUB_CRED_USR'
+			sh 'echo password: $GITHUB_CRED_PSW'
                     }
                 }
-            }
-        }
+            
     }
+    
 	
 	post {
         
@@ -87,9 +98,13 @@ pipeline {
 
              ''', subject: '$JOB_NAME' , from: 'jenkins@example.com', to: 'vlakkamraju11@gmail.com'
 
-}
-}
-}
+			}
+		}
+	}
+
+
+
+
 
 
 
